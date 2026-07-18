@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aye Nyein Wai | Full-Stack Developer</title>
+
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --bg-color: #0a0a0a;
+        --text-primary: #ffffff;
+        --text-secondary: #888888;
+        --accent-color: #00f2ff;
+        --accent-color-2: #7000ff;
+        --glass-bg: rgba(255, 255, 255, 0.03);
+        --glass-border: rgba(255, 255, 255, 0.08);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-primary);
+        overflow-x: hidden;
+        line-height: 1.6;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0a0a0a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--accent-color-2);
+        border-radius: 10px;
+      }
+
+      /* Three.js Canvas */
+      #bg-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: -1;
+      }
+
+      /* Navigation */
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        padding: 1.5rem 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 100;
+        backdrop-filter: blur(10px);
+        background: rgba(10, 10, 10, 0.6);
+        border-bottom: 1px solid var(--glass-border);
+      }
+
+      .logo {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        text-decoration: none;
+      }
+      .logo span {
+        color: var(--accent-color);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+
+      .nav-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: color 0.3s;
+        position: relative;
+      }
+
+      .nav-links a:hover {
+        color: var(--text-primary);
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--accent-color);
+        transition: width 0.3s;
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      /* Layout */
+      main {
+        position: relative;
+        z-index: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 5%;
+      }
+
+      section {
+        min-height: 100vh;
+        padding: 8rem 0 4rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: "Space Grotesk", sans-serif;
+      }
+
+      .section-title {
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+        text-align: center;
+      }
+
+      .section-title span {
+        background: linear-gradient(
+          to right,
+          var(--accent-color),
+          var(--accent-color-2)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      p {
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+      }
+
+      /* Hero Section (Updated - Centered, No Image) */
+      .hero {
+        text-align: center;
+        align-items: center;
+      }
+
+      .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .hero-greeting {
+        color: var(--accent-color);
+        font-family: "Space Grotesk", sans-serif;
+        margin-bottom: 1.5rem;
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--accent-color);
+        border-radius: 50px;
+        font-size: 0.9rem;
+      }
+
+      .hero h1 {
+        font-size: 4.5rem;
+        line-height: 1.1;
+        margin-bottom: 1rem;
+        background: linear-gradient(to right, #fff, #aaa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .hero-role {
+        font-size: 1.8rem;
+        color: var(--accent-color);
+        margin-bottom: 2rem;
+        font-family: "Space Grotesk", sans-serif;
+      }
+
+      .hero-desc {
+        max-width: 600px;
+        margin: 0 auto 2.5rem;
+        font-size: 1.1rem;
+      }
+
+      .hero-btns {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        padding: 0.9rem 2rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-primary {
+        background: var(--accent-color);
+        color: #000;
+      }
+
+      .btn-primary:hover {
+        box-shadow: 0 0 20px var(--accent-color);
+        transform: translateY(-3px);
+      }
+
+      .btn-secondary {
+        border: 1px solid var(--glass-border);
+        color: var(--text-primary);
+        background: var(--glass-bg);
+      }
+
+      .btn-secondary:hover {
+        border-color: var(--accent-color);
+        color: var(--accent-color);
+      }
+
+      /* About & Skills */
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: start;
+      }
+
+      .glass-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 2rem;
+        backdrop-filter: blur(10px);
+        transition: transform 0.3s;
+      }
+
+      .glass-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(0, 242, 255, 0.3);
+      }
+
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+
+      .skill-category h3 {
+        color: var(--accent-color);
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+      }
+
+      .tech-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .tech-tags span {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        color: #ccc;
+        border: 1px solid transparent;
+        transition: 0.3s;
+      }
+
+      .tech-tags span:hover {
+        border-color: var(--accent-color-2);
+        color: #fff;
+      }
+
+      /* Projects */
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .project-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        padding: 2rem;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .project-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 0;
+        background: var(--accent-color);
+        transition: height 0.3s;
+      }
+
+      .project-card:hover::before {
+        height: 100%;
+      }
+
+      .project-card:hover {
+        border-color: rgba(0, 242, 255, 0.2);
+        transform: translateY(-5px);
+      }
+
+      .project-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .project-card h3 {
+        font-size: 1.3rem;
+        color: var(--text-primary);
+      }
+
+      .project-icon {
+        font-size: 1.5rem;
+        color: var(--accent-color-2);
+      }
+
+      .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1rem 0;
+      }
+
+      .project-tags span {
+        font-size: 0.75rem;
+        background: rgba(112, 0, 255, 0.1);
+        color: var(--accent-color);
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+      }
+
+      /* Experience Timeline */
+      .timeline {
+        position: relative;
+        border-left: 2px solid var(--glass-border);
+        padding-left: 2rem;
+        margin-left: 1rem;
+      }
+
+      .timeline-item {
+        position: relative;
+        margin-bottom: 3rem;
+      }
+
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -2.5rem;
+        top: 0.5rem;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--accent-color);
+        box-shadow: 0 0 10px var(--accent-color);
+      }
+
+      .timeline-date {
+        color: var(--accent-color);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        font-family: "Space Grotesk", sans-serif;
+      }
+
+      .timeline-item h3 {
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+      }
+
+      /* Contact */
+      .contact-container {
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .contact-links {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .contact-link {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        color: var(--text-primary);
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      .contact-link:hover {
+        border-color: var(--accent-color);
+        transform: translateY(-3px);
+      }
+
+      .contact-link i {
+        font-size: 1.2rem;
+        color: var(--accent-color);
+      }
+
+      footer {
+        text-align: center;
+        padding: 2rem;
+        border-top: 1px solid var(--glass-border);
+        margin-top: 4rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 968px) {
+        .hero h1 {
+          font-size: 3rem;
+        }
+        .hero-role {
+          font-size: 1.4rem;
+        }
+        .about-grid {
+          grid-template-columns: 1fr;
+        }
+        .nav-links {
+          display: none;
+        }
+      }
+    </style>
+
+    <!-- Three.js Import Map -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <!-- Three.js Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav>
+      <a href="#home" class="logo">Aye<span>.</span>Dev</a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <!-- Hero Section -->
+      <section id="home" class="hero">
+        <div class="hero-content">
+          <span class="hero-greeting">Hello, I'm</span>
+          <h1>Aye Nyein Wai</h1>
+          <div class="hero-role">Full-Stack Web Developer</div>
+          <p class="hero-desc">
+            I build responsive, dynamic web applications and automate workflows
+            using PHP, Laravel, Vue.js, and Salesforce. Eager to deliver clean,
+            reliable, and impactful solutions.
+          </p>
+          <div class="hero-btns">
+            <a href="#projects" class="btn-primary"
+              >View Projects <i class="fa-solid fa-arrow-right"></i
+            ></a>
+            <a href="#contact" class="btn-secondary">Contact Me</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- About & Skills Section -->
+      <section id="about">
+        <h2 class="section-title">About <span>Me</span></h2>
+        <div class="about-grid">
+          <div class="glass-card">
+            <h3 style="color: #fff; margin-bottom: 1rem">Who am I?</h3>
+            <p>
+              I am a passionate Web Developer with practical experience in both
+              front-end and back-end development. I enjoy creating clean,
+              responsive, and scalable applications that provide great user
+              experiences.
+            </p>
+            <p>
+              Based in Yangon, Myanmar, I am an active learner, always eager to
+              grow and contribute to reliable, user-friendly web applications. I
+              pride myself on my superior attention to detail and strong
+              problem-solving skills.
+            </p>
+            <div
+              style="
+                margin-top: 1.5rem;
+                display: flex;
+                gap: 1.5rem;
+                font-size: 0.9rem;
+                color: #aaa;
+                flex-wrap: wrap;
+              "
+            >
+              <span
+                ><i class="fa-solid fa-location-dot"></i> Yangon, Myanmar</span
+              >
+              <span
+                ><i class="fa-solid fa-language"></i> EN (Inter), JP (N5)</span
+              >
+            </div>
+          </div>
+
+          <div id="skills" class="glass-card">
+            <div class="skills-grid">
+              <div class="skill-category">
+                <h3>Frontend</h3>
+                <div class="tech-tags">
+                  <span>HTML/CSS</span><span>JavaScript</span><span>Vue.js</span
+                  ><span>Nuxt.js</span><span>Bootstrap</span><span>jQuery</span
+                  ><span>Smarty</span>
+                </div>
+              </div>
+              <div class="skill-category">
+                <h3>Backend</h3>
+                <div class="tech-tags">
+                  <span>PHP</span><span>Laravel</span><span>Zend Framework</span
+                  ><span>MySQL</span><span>REST APIs</span>
+                </div>
+              </div>
+              <div class="skill-category">
+                <h3>CMS & Cloud</h3>
+                <div class="tech-tags">
+                  <span>WordPress</span><span>EC-Cube</span><span>Webflow</span
+                  ><span>Salesforce (Apex/LWC)</span>
+                </div>
+              </div>
+              <div class="skill-category">
+                <h3>Tools</h3>
+                <div class="tech-tags">
+                  <span>Git</span><span>GitHub</span><span>Bitbucket</span
+                  ><span>Docker</span><span>Postman</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects Section -->
+      <section id="projects">
+        <h2 class="section-title">Featured <span>Projects</span></h2>
+        <div class="projects-grid">
+          <!-- Project 1: Lunch Order System -->
+          <div class="project-card">
+            <div class="project-header">
+              <h3>Company Lunch Order System</h3>
+              <i class="fa-solid fa-utensils project-icon"></i>
+            </div>
+            <div class="project-tags">
+              <span>Laravel</span><span>PHP</span><span>MySQL</span>
+            </div>
+            <p>
+              Maintained and enhanced an internal lunch ordering platform.
+              Conducted thorough testing, resolved critical bugs, and developed
+              new features to improve the ordering workflow and user experience.
+            </p>
+          </div>
+
+          <!-- Project 2: Shopping Site (Zend) -->
+          <div class="project-card">
+            <div class="project-header">
+              <h3>E-Commerce Shopping Site</h3>
+              <i class="fa-solid fa-bag-shopping project-icon"></i>
+            </div>
+            <div class="project-tags">
+              <span>PHP</span><span>Zend Framework</span><span>JavaScript</span>
+            </div>
+            <p>
+              Led the frontend renewal design and implemented new features for
+              an existing e-commerce platform using Zend Framework. Enhanced
+              UI/UX and integrated new functionalities to improve the shopping
+              experience.
+            </p>
+          </div>
+
+          <!-- Project 3: Medical Clothes Shopping Site -->
+          <div class="project-card">
+            <div class="project-header">
+              <h3>Medical Clothes Shopping Site</h3>
+              <i class="fa-solid fa-kit-medical project-icon"></i>
+            </div>
+            <div class="project-tags">
+              <span>EC-Cube</span><span>Smarty</span><span>PHP</span>
+            </div>
+            <p>
+              Contributed to the renewal of the shipping flow for a medical
+              apparel e-commerce site. Conducted extensive testing and bug
+              fixing using EC-Cube and Smarty template engine to ensure a smooth
+              checkout process.
+            </p>
+          </div>
+
+          <!-- Project 4: Salesforce System -->
+          <div class="project-card">
+            <div class="project-header">
+              <h3>Customer Contracts System</h3>
+              <i class="fa-solid fa-handshake project-icon"></i>
+            </div>
+            <div class="project-tags">
+              <span>Apex</span><span>Salesforce Flows</span><span>LWC</span>
+            </div>
+            <p>
+              Built dynamic dashboards with admin/employee screens. Automated
+              flows for customer conversion, contract reminders, and employee
+              validation. Developed CSV import/update Apex scripts.
+            </p>
+          </div>
+
+          <!-- Project 5: MetaTeam Renewal Site -->
+          <div class="project-card">
+            <div class="project-header">
+              <h3>MetaTeam Renewal Site</h3>
+              <i class="fa-solid fa-globe project-icon"></i>
+            </div>
+            <div class="project-tags">
+              <span>WordPress</span><span>PHP</span><span>JavaScript</span>
+            </div>
+            <p>
+              Led design coding and development of the company site. Implemented
+              dynamic pages for portfolios, blogs, activities, and jobs, along
+              with a multi-language switcher.
+            </p>
+          </div>
+
+          <!-- Project 6: Event Register System -->
+          <div class="project-card">
+            <div class="project-header">
+              <h3>Event Register System</h3>
+              <i class="fa-solid fa-calendar-check project-icon"></i>
+            </div>
+            <div class="project-tags">
+              <span>PHP</span><span>JavaScript</span><span>CSS</span>
+            </div>
+            <p>
+              Developed an event registration system with a new responsive
+              design. Implemented logic to adjust event room placements based on
+              meeting times and prevent double-booking.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Experience Section -->
+      <section id="experience">
+        <h2 class="section-title">Work <span>Experience</span></h2>
+        <div
+          class="glass-card"
+          style="max-width: 800px; margin: 0 auto; width: 100%"
+        >
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-date">July 2024 – Present</div>
+              <h3>Web Developer @ Meta Team Myanmar</h3>
+              <ul
+                style="
+                  padding-left: 1.5rem;
+                  margin-top: 1rem;
+                  color: var(--text-secondary);
+                "
+              >
+                <li>
+                  Developed and maintained web applications using PHP, Laravel,
+                  Zend, and WordPress.
+                </li>
+                <li>
+                  Worked on EC-Cube and Salesforce projects, handling testing,
+                  bug fixing, and new feature implementation.
+                </li>
+                <li>
+                  Created REST APIs and integrated frontend applications with
+                  backend services.
+                </li>
+                <li>
+                  Worked with MySQL databases for data management and utilized
+                  Git for source control.
+                </li>
+              </ul>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-date">Nov 2023 – Jan 2024</div>
+              <h3>Fullstack Developer Course @ CODE LAB</h3>
+              <p style="margin-top: 0.5rem">
+                Completed intensive full-stack development training focusing on
+                modern web frameworks and project building.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section id="contact">
+        <h2 class="section-title">Get In <span>Touch</span></h2>
+        <div class="contact-container">
+          <p>
+            Have a project in mind or looking for a dedicated developer? Let's
+            connect!
+          </p>
+          <div class="contact-links">
+            <a href="mailto:ayenyeinwai6116@gmail.com" class="contact-link">
+              <i class="fa-solid fa-envelope"></i>
+              <span>Email Me</span>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/aye-nyein-wai-84896a266/"
+              target="_blank"
+              class="contact-link"
+            >
+              <i class="fa-brands fa-linkedin"></i>
+              <span>LinkedIn</span>
+            </a>
+            <a href="tel:+9599766942144" class="contact-link">
+              <i class="fa-solid fa-phone"></i>
+              <span>Call Me</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        &copy; 2026 Aye Nyein Wai. Designed & Built with HTML, CSS, and
+        Three.js.
+      </p>
+    </footer>
+
+    <!-- Three.js Script -->
+    <script type="module">
+      import * as THREE from "three";
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000,
+      );
+      const renderer = new THREE.WebGLRenderer({
+        canvas: document.querySelector("#bg-canvas"),
+        alpha: true,
+      });
+
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.position.setZ(30);
+
+      // Particles
+      const particlesGeometry = new THREE.BufferGeometry();
+      const particlesCount = 2000;
+      const posArray = new Float32Array(particlesCount * 3);
+
+      for (let i = 0; i < particlesCount * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 50;
+      }
+
+      particlesGeometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(posArray, 3),
+      );
+      const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.05,
+        color: 0x00f2ff,
+        transparent: true,
+        opacity: 0.6,
+        blending: THREE.AdditiveBlending,
+      });
+
+      const particlesMesh = new THREE.Points(
+        particlesGeometry,
+        particlesMaterial,
+      );
+      scene.add(particlesMesh);
+
+      // Central Wireframe
+      const sphereGeometry = new THREE.IcosahedronGeometry(12, 1);
+      const sphereMaterial = new THREE.MeshBasicMaterial({
+        color: 0x7000ff,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.15,
+      });
+      const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+      scene.add(sphere);
+
+      // Mouse Interaction
+      let mouseX = 0;
+      let mouseY = 0;
+      let targetX = 0;
+      let targetY = 0;
+
+      document.addEventListener("mousemove", (event) => {
+        mouseX = event.clientX - window.innerWidth / 2;
+        mouseY = event.clientY - window.innerHeight / 2;
+      });
+
+      // Animation Loop
+      const animate = () => {
+        requestAnimationFrame(animate);
+
+        targetX += (mouseX - targetX) * 0.05;
+        targetY += (mouseY - targetY) * 0.05;
+
+        particlesMesh.rotation.y = targetX * 0.0005;
+        particlesMesh.rotation.x = targetY * 0.0005;
+
+        sphere.rotation.y += 0.002;
+        sphere.rotation.x += 0.001;
+
+        renderer.render(scene, camera);
+      };
+
+      animate();
+
+      // Resize handler
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    </script>
+  </body>
+</html>
