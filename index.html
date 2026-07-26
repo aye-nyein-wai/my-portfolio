@@ -130,6 +130,10 @@
         width: 100%;
       }
 
+      .hamburger-btn {
+        display: none;
+      }
+
       /* Layout */
       main {
         position: relative;
@@ -174,7 +178,7 @@
         margin-bottom: 1rem;
       }
 
-      /* Hero Section (Updated - Centered, No Image) */
+      /* Hero Section */
       .hero {
         text-align: center;
         align-items: center;
@@ -475,8 +479,69 @@
         .about-grid {
           grid-template-columns: 1fr;
         }
+      }
+
+      @media (max-width: 768px) {
+        nav.show {
+          display: block;
+          text-align: center;
+        }
         .nav-links {
-          display: none;
+          position: fixed;
+          margin-top: 1.5rem;
+          left: 0;
+          width: 100%;
+          height: 100vh;
+          background: rgba(10, 10, 10, 0.95);
+          display: block;
+          transform: translateX(-100%);
+          transition: transform 0.4s ease;
+          z-index: 100;
+        }
+        nav.show .nav-links {
+          transform: translateX(0);
+        }
+        nav.show .nav-links li:not(:last-child) {
+          margin-bottom: 30px;
+        }
+        .hamburger-btn {
+          display: block;
+          width: 30px;
+          height: 18px;
+          position: relative;
+        }
+        nav.show .hamburger-btn {
+          position: absolute;
+          top: 2.2rem;
+          right: 5%;
+        }
+        .hamburger-btn .line,
+        .hamburger-btn .line::before,
+        .hamburger-btn .line::after {
+          display: block;
+          width: 100%;
+          height: 1px;
+          background-color: var(--text-primary);
+        }
+        .hamburger-btn .line::before,
+        .hamburger-btn .line::after {
+          position: absolute;
+          content: "";
+        }
+        .hamburger-btn .line::before {
+          top: 50%;
+        }
+        .hamburger-btn .line::after {
+          bottom: 0;
+        }
+        nav.show .hamburger-btn .line::before {
+          opacity: 0;
+        }
+        nav.show .hamburger-btn .line {
+          transform: rotate(50deg);
+        }
+        nav.show .hamburger-btn .line::after {
+          transform: rotate(80deg);
         }
       }
     </style>
@@ -504,6 +569,9 @@
         <li><a href="#experience">Experience</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
+      <div class="hamburger-btn" id="js-hamburger-btn">
+        <span class="line"></span>
+      </div>
     </nav>
 
     <main>
@@ -559,7 +627,7 @@
                 ><i class="fa-solid fa-location-dot"></i> Yangon, Myanmar</span
               >
               <span
-                ><i class="fa-solid fa-language"></i> EN (Inter), JP (N5)</span
+                ><i class="fa-solid fa-language"></i> EN (Inter), JP (N4)</span
               >
             </div>
           </div>
@@ -604,7 +672,24 @@
       <section id="projects">
         <h2 class="section-title">Featured <span>Projects</span></h2>
         <div class="projects-grid">
-          <!-- Project 1: Lunch Order System -->
+          <!-- Project 1: Bulletin-board -->
+          <div class="project-card">
+            <div class="project-header">
+              <h3>Bulletin Board System</h3>
+              <i class="fa-solid fa-clipboard-list project-icon"></i>
+            </div>
+            <div class="project-tags">
+              <span>Laravel</span><span>Vue.js</span><span>Tailwind CSS</span
+              ><span>MySQL</span>
+            </div>
+            <p>
+              Personal full-stack project featuring authentication, role-based
+              access control, user and post management, image uploads, and
+              RESTful API integration. Designed with Laravel, Vue.js, Tailwind
+              CSS, and MySQL.
+            </p>
+          </div>
+          <!-- Project 2: Lunch Order System -->
           <div class="project-card">
             <div class="project-header">
               <h3>Company Lunch Order System</h3>
@@ -620,7 +705,7 @@
             </p>
           </div>
 
-          <!-- Project 2: Shopping Site (Zend) -->
+          <!-- Project 3: Shopping Site (Zend) -->
           <div class="project-card">
             <div class="project-header">
               <h3>E-Commerce Shopping Site</h3>
@@ -637,7 +722,7 @@
             </p>
           </div>
 
-          <!-- Project 3: Medical Clothes Shopping Site -->
+          <!-- Project 4: Medical Clothes Shopping Site -->
           <div class="project-card">
             <div class="project-header">
               <h3>Medical Clothes Shopping Site</h3>
@@ -654,7 +739,7 @@
             </p>
           </div>
 
-          <!-- Project 4: Salesforce System -->
+          <!-- Project 5: Salesforce System -->
           <div class="project-card">
             <div class="project-header">
               <h3>Customer Contracts System</h3>
@@ -670,7 +755,7 @@
             </p>
           </div>
 
-          <!-- Project 5: Renewal Site -->
+          <!-- Project 6: Renewal Site -->
           <div class="project-card">
             <div class="project-header">
               <h3>Company Renewal Site</h3>
@@ -680,13 +765,15 @@
               <span>WordPress</span><span>PHP</span><span>JavaScript</span>
             </div>
             <p>
-              Led design coding and development of the company site. Implemented
-              dynamic pages for portfolios, blogs, activities, and jobs, along
-              with a multi-language switcher.
+              Implemented the frontend of the company's website redesign in
+              WordPress. Developed dynamic pages for portfolios, blogs,
+              activities, and careers, integrated multilingual functionality,
+              and customized WordPress templates based on the design
+              specifications.
             </p>
           </div>
 
-          <!-- Project 6: Event Register System -->
+          <!-- Project 7: Event Register System -->
           <div class="project-card">
             <div class="project-header">
               <h3>Event Register System</h3>
@@ -772,10 +859,6 @@
             >
               <i class="fa-brands fa-linkedin"></i>
               <span>LinkedIn</span>
-            </a>
-            <a href="tel:+9599766942144" class="contact-link">
-              <i class="fa-solid fa-phone"></i>
-              <span>Call Me</span>
             </a>
           </div>
         </div>
@@ -876,6 +959,29 @@
 
       animate();
 
+      // hamburger-btn
+      const hamburger = document.getElementById("js-hamburger-btn");
+      const mobileNav = document.querySelector("nav");
+      const mobileNavLinks = document.querySelector(".nav-links");
+      const navItems = document.querySelectorAll(".nav-links a");
+
+      hamburger.onclick = function () {
+        mobileNav.classList.toggle("show");
+
+        if (mobileNav.classList.contains("show")) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "";
+        }
+      };
+
+      // Close menu after clicking a nav item
+      navItems.forEach((item) => {
+        item.onclick = function () {
+          mobileNav.classList.remove("show");
+          document.body.style.overflow = "";
+        };
+      });
       // Resize handler
       window.addEventListener("resize", () => {
         camera.aspect = window.innerWidth / window.innerHeight;
